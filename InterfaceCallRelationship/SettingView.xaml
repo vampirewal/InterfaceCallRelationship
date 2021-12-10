@@ -1,0 +1,222 @@
+﻿<VUc:AddOrEditUcViewBase x:Class="InterfaceCallRelationship.SettingView"
+                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                         xmlns:vc="Vampirewal.CustomControl"
+                         xmlns:VUc="Vampirewal.UcView"
+                         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                         DataContext="{Binding Source={StaticResource Locator},Path=SettingViewModel}"
+                         mc:Ignorable="d"
+                         d:DesignHeight="450"
+                         d:DesignWidth="800">
+    <ScrollViewer>
+        <StackPanel>
+            <Expander Margin="5"
+                      BorderBrush="#ddd"
+                      BorderThickness="1"
+                      Header="系统字典设置">
+                <Border Padding="5"
+                        Background="{StaticResource BaseBackground}"
+                        BorderBrush="{StaticResource BaseForeground}"
+                        BorderThickness="1,0,1,1"
+                        CornerRadius="0,0,5,5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton Content="新增"
+                                          Style="{StaticResource ToggleButtonSuccess}" 
+                                          Name="AddToggleButton">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding AddNewSystemClassCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ToggleButton>
+                        </StackPanel>
+                        <Popup AllowsTransparency="True"
+                               IsOpen="{Binding ElementName=AddToggleButton,Path=IsChecked}"
+                               Placement="Bottom"
+                               PlacementTarget="{Binding ElementName=AddToggleButton}"
+                               PopupAnimation="Fade"
+                               HorizontalOffset="0"
+                               VerticalOffset="5"
+                               StaysOpen="False">
+                            <Grid>
+                                <Border Background="{StaticResource BaseBackground3}"
+                                        CornerRadius="5">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="5"
+                                                          Direction="0"
+                                                          Opacity="0.7"
+                                                          ShadowDepth="0"
+                                                          Color="#3a3952" />
+                                    </Border.Effect>
+                                </Border>
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="40" />
+                                    </Grid.RowDefinitions>
+                                    <vc:TitleContent Title="系统名称"
+                                                     TitleWidth="50"
+                                                     TitleForeground="{StaticResource BaseForeground}">
+                                        <TextBox Text="{Binding NewSystemClass.SystemName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+                                    </vc:TitleContent>
+                                    <Button Grid.Row="1" HorizontalAlignment="Stretch"
+                                            Content="提交"
+                                            Style="{StaticResource ButtonSuccess}"
+                                            Command="{Binding InsertSystemClassCommand}" />
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                        <Border Grid.Row="1"
+                                CornerRadius="5"
+                                Background="{StaticResource BaseForeground}">
+                            <DataGrid Background="Transparent"
+                                      Margin="5,0"
+                                      ItemsSource="{Binding Systems}"
+                                      AutoGenerateColumns="False"
+                                      x:Name="dg"
+                                      HeadersVisibility="All"
+                                      RowHeaderWidth="60"
+                                      SelectionMode="Single"
+                                      VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="系统名称"
+                                                        Width="1*"
+                                                        Binding="{Binding SystemName}"
+                                                        IsReadOnly="True" />
+                                    <DataGridTemplateColumn Header="是否启用"
+                                                            Width="1*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsEnable}" IsEnabled="False"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Expander>
+            
+            <Expander Margin="5"
+                      BorderBrush="#ddd"
+                      BorderThickness="1"
+                      Header="模块字典设置">
+                <Border Padding="5"
+                        Background="{StaticResource BaseBackground}"
+                        BorderBrush="{StaticResource BaseForeground}"
+                        BorderThickness="1,0,1,1"
+                        CornerRadius="0,0,5,5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton Content="新增"
+                                          Style="{StaticResource ToggleButtonSuccess}"
+                                          Name="AddNewModuleToggleButton">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding AddNewModuleClassCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ToggleButton>
+                        </StackPanel>
+                        <Popup AllowsTransparency="True"
+                               IsOpen="{Binding ElementName=AddNewModuleToggleButton,Path=IsChecked}"
+                               Placement="Bottom"
+                               PlacementTarget="{Binding ElementName=AddNewModuleToggleButton}"
+                               PopupAnimation="Fade"
+                               HorizontalOffset="0"
+                               VerticalOffset="5"
+                               StaysOpen="False">
+                            <Grid>
+                                <Border Background="{StaticResource BaseBackground3}"
+                                        CornerRadius="5">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="5"
+                                                          Direction="0"
+                                                          Opacity="0.7"
+                                                          ShadowDepth="0"
+                                                          Color="#3a3952" />
+                                    </Border.Effect>
+                                </Border>
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="40" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <vc:TitleContent Title="系统名称" Margin="3"
+                                                         TitleWidth="50"
+                                                         TitleForeground="{StaticResource BaseForeground}">
+                                            <!--<TextBox Text="{Binding NewModuleClass.ModuleName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="120"/>-->
+                                            <ComboBox ItemsSource="{Binding Systems}"
+                                                      DisplayMemberPath="SystemName"
+                                                      SelectedValuePath="Id"
+                                                      Width="120"
+                                                      SelectedItem="{Binding ModuleSelectSystem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                        </vc:TitleContent>
+                                        <vc:TitleContent Title="模块名称"
+                                                         Margin="3"
+                                                         TitleWidth="50"
+                                                         TitleForeground="{StaticResource BaseForeground}">
+                                            <TextBox Text="{Binding NewModuleClass.ModuleName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                     Width="120" />
+                                        </vc:TitleContent>
+                                    </StackPanel>
+                                    
+                                    <Button Grid.Row="1" HorizontalAlignment="Stretch"
+                                            Content="提交"
+                                            Style="{StaticResource ButtonSuccess}"
+                                            Command="{Binding InsertModuleClassCommand}" />
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                        <Border Grid.Row="1"
+                                CornerRadius="5"
+                                Background="{StaticResource BaseForeground}">
+                            <DataGrid Background="Transparent"
+                                      Margin="5,0"
+                                      ItemsSource="{Binding Modules}"
+                                      AutoGenerateColumns="False"
+                                      
+                                      HeadersVisibility="All"
+                                      RowHeaderWidth="60"
+                                      SelectionMode="Single"
+                                      VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="系统名称"
+                                                        Width="1*"
+                                                        Binding="{Binding SystemName}"
+                                                        IsReadOnly="True" />
+                                    <DataGridTextColumn Header="模块名称"
+                                                        Width="1*"
+                                                        Binding="{Binding ModuleName}"
+                                                        IsReadOnly="True" />
+                                    <DataGridTemplateColumn Header="是否启用"
+                                                            Width="1*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsEnable}"
+                                                          IsEnabled="False" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</VUc:AddOrEditUcViewBase>

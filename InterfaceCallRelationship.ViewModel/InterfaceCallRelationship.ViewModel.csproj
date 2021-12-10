@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vampirewal.Core" Version="1.0.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfaceCallRelationship.DataAccess\InterfaceCallRelationship.DataAccess.csproj" />
+    <ProjectReference Include="..\InterfaceCallRelationship.Model\InterfaceCallRelationship.Model.csproj" />
+  </ItemGroup>
+
+</Project>

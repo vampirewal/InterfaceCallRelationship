@@ -1,0 +1,32 @@
+{
+    "LogLevel": 0,
+    "AppChineseName": "接口调用关系建立",
+    "AppVersion": "1.0.0.0",
+  "ConnectionStrings": [
+    {
+      "Key": "defulat",
+      "Value": "Data Source=ICRDB.db",
+      "DbType": 4,
+      "Version": "1.0",
+      "DbContext": "ICR_DataContext"
+    }
+  ],
+    "DbType": 0,
+    "EncryptKey": "",
+  "AppSettings": {
+    "ServerIp": "127.0.0.1",
+    "ServerPort1": "9999",
+    "ServerPort2": "9998"
+  },
+    "FileUploadOptions": {
+        "SaveFileMode": 0,
+        "UploadDir": "d:\\upload",
+        "UploadLimit": 20971520
+    },
+    "UpdateSetting": {
+        "UpdateName": "",
+        "ServerIp": "192.168.93.128",
+        "ServerPort": "9998",
+        "AppToken": "youjing"
+    }
+}
