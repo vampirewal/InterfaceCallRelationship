@@ -3,7 +3,9 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:VWin="Vampirewal.Windows"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:VBeh="Vampirewal.Behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:VBeh="Vampirewal.Behaviors"
+                     xmlns:test="clr-namespace:InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl"
                      xmlns:local="clr-namespace:InterfaceCallRelationship"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      DataContext="{Binding Source={StaticResource Locator},Path=MainViewModel}"
@@ -58,8 +60,6 @@
                   RenderTransformOrigin="0.5,0.5"
                   Stretch="Fill" />
         </Button>
-        
-       
     </VWin:MainWindowBase.TopCustomButtons>
     <VWin:MainWindowBase.LeftContent>
         <Grid>
@@ -104,58 +104,142 @@
             </ScrollViewer>-->
             <Border CornerRadius="5"
                     Background="{StaticResource BaseForeground}">
-                <DataGrid ItemsSource="{Binding Functions}"
-                          Background="Transparent"
-                          Margin="5,0"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="All"
-                          RowHeaderWidth="60"
-                          SelectionMode="Single"
-                          VerticalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="功能名称" Binding="{Binding FunctionName}" IsReadOnly="True"/>
-                        <DataGridTemplateColumn Header="查看方法">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <ToggleButton Content="查看" x:Name="lookMethods"/>
-                                        <Popup AllowsTransparency="True"
-                                               IsOpen="{Binding ElementName=lookMethods,Path=IsChecked}"
-                                               Placement="Bottom"
-                                               PlacementTarget="{Binding ElementName=lookMethods}"
-                                               PopupAnimation="Fade"
-                                               HorizontalOffset="0"
-                                               VerticalOffset="5"
-                                               StaysOpen="False">
-                                            <Grid>
-                                                <Border Background="{StaticResource BaseBackground3}"
-                                                        CornerRadius="5">
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="5"
-                                                                          Direction="0"
-                                                                          Opacity="0.7"
-                                                                          ShadowDepth="0"
-                                                                          Color="#3a3952" />
-                                                    </Border.Effect>
-                                                </Border>
-                                                <Border Width="100"
-                                                        Height="100" />
-                                            </Grid>
-                                        </Popup>
-                                    </Grid>
-                                    
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                    <i:Interaction.Behaviors>
-                        <VBeh:DataGridGroupByBehavior  SetGroupByProrName="SystemName-ModuleName"/>
-                    </i:Interaction.Behaviors>
-                </DataGrid>
+                <StackPanel>
+                    <!--此处放搜索框，后面写-->
+                    <DataGrid ItemsSource="{Binding Functions}"
+                              Background="Transparent"
+                              Margin="5,0"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="All"
+                              RowHeaderWidth="60"
+                              SelectionMode="Single"
+                              VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="功能名称"
+                                                Width="2*"
+                                                Binding="{Binding FunctionName}"
+                                                IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="操作"
+                                                    Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <ToggleButton Content="查看方法"
+                                                          HorizontalAlignment="Center"
+                                                          x:Name="lookMethods" />
+                                            <Popup AllowsTransparency="True"
+                                                   IsOpen="{Binding ElementName=lookMethods,Path=IsChecked}"
+                                                   Placement="Bottom"
+                                                   PlacementTarget="{Binding ElementName=lookMethods}"
+                                                   PopupAnimation="Fade"
+                                                   HorizontalOffset="0"
+                                                   VerticalOffset="5"
+                                                   StaysOpen="False">
+                                                <Grid Margin="5">
+                                                    <Border Background="{StaticResource BaseBackground3}"
+                                                            CornerRadius="5">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect BlurRadius="5"
+                                                                              Direction="0"
+                                                                              Opacity="0.7"
+                                                                              ShadowDepth="0"
+                                                                              Color="#3a3952" />
+                                                        </Border.Effect>
+                                                    </Border>
+                                                    <Border Width="410"
+                                                            CornerRadius="5"
+                                                            Background="{StaticResource BaseForeground}">
+                                                        <DataGrid ItemsSource="{Binding methods}"
+                                                                  Background="Transparent"
+                                                                  Margin="5,0"
+                                                                  AutoGenerateColumns="False"
+                                                                  HeadersVisibility="All"
+                                                                  RowHeaderWidth="60"
+                                                                  SelectionMode="Single"
+                                                                  VerticalScrollBarVisibility="Auto">
+                                                            <DataGrid.Columns>
+                                                                <DataGridTextColumn Header="方法名"
+                                                                                    Binding="{Binding MethodName}"
+                                                                                    IsReadOnly="True"
+                                                                                    Width="1*" />
+                                                                <DataGridTemplateColumn Header="操作"
+                                                                                        Width="1*">
+                                                                    <DataGridTemplateColumn.CellTemplate>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <Button Content="建立关联" Margin="5,0"
+                                                                                        Command="{Binding DataContext.AssociatedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}" 
+                                                                                        CommandParameter="{Binding}"/>
+                                                                                <Button Content="查看引用"
+                                                                                        Command="{Binding DataContext.LookReferenceCommnad,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}"
+                                                                                        CommandParameter="{Binding}" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </DataGridTemplateColumn.CellTemplate>
+                                                                </DataGridTemplateColumn>
+                                                            </DataGrid.Columns>
+                                                            <i:Interaction.Behaviors>
+                                                                <VBeh:DataGridGroupByBehavior  SetGroupByProrName="IsPublic" />
+                                                            </i:Interaction.Behaviors>
+                                                        </DataGrid>
+                                                    </Border>
+                                                </Grid>
+                                            </Popup>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        <i:Interaction.Behaviors>
+                            <VBeh:DataGridGroupByBehavior  SetGroupByProrName="SystemClassName-ModuleClassName" />
+                        </i:Interaction.Behaviors>
+                    </DataGrid>
+                </StackPanel>
             </Border>
-            
         </Grid>
-        
     </VWin:MainWindowBase.LeftContent>
-    <Grid></Grid>
+    <Border CornerRadius="5"
+            Background="White">
+        <!--<Canvas  Margin="3" Name="canvas"
+                ClipToBounds="True">
+            <TextBlock Canvas.Top="2"
+                       Canvas.Left="2"
+                       x:Name="tt"
+                       FontSize="24"></TextBlock>
+            <test:ClassNode Canvas.Top="0"
+                            Canvas.Left="0" ShowMethodName="test!!"/>
+            <Rectangle />
+            -->
+        <!--<Thumb Canvas.Top="2"
+               Canvas.Left="2"
+               Width="35"
+               Height="35"
+               DragDelta="Thumb_DragDelta"
+               DragStarted="Thumb_DragStarted"
+               DragCompleted="Thumb_DragCompleted" />-->
+        <!--
+        </Canvas>-->
+        <!--<ItemsControl Margin="3"
+                      ItemsSource="{Binding Methods}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas ClipToBounds="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <test:ClassNode Canvas.Top="0"
+                                    IsTopNode="{Binding IsTopNode}"
+                                    TitleName="{Binding FunctionName}"
+                                    Canvas.Left="0"
+                                    ShowMethodName="{Binding MethodName}" DragDelta="ClassNode_DragDelta"/>
+                </DataTemplate>
+                
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>-->
+        <test:ShowCallRelationshipPanel ClassNodes="{Binding Methods}"
+                                        ShowDownCommand="{Binding ShowDownCommand}"
+                                        ShowUpCommand="{Binding ShowUpCommand}"
+                                        ClipToBounds="True" />
+    </Border>
 </VWin:MainWindowBase>

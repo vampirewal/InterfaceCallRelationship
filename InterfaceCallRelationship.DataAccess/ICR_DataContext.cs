@@ -35,6 +35,7 @@ namespace InterfaceCallRelationship.DataAccess
         public DbSet<FunctionClass> Functions { get; set; }
         public DbSet<MethodClass> Methods { get; set; }
 
+        public DbSet<MethodClassReferenceRelationship> ReferenceRelationships { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

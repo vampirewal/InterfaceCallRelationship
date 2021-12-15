@@ -37,5 +37,11 @@ namespace InterfaceCallRelationship.Model
         /// 新增功能窗体
         /// </summary>
         public static string AddNewFunctionView = $"{BaseViewKey}.AddNewFunctionView";
+
+        /// <summary>
+        /// 建立关联的页面
+        /// </summary>
+
+        public static string AssociatedView = $"{BaseViewKey}.AssociatedView";
     }
 }

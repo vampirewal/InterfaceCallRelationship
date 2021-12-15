@@ -42,6 +42,7 @@ namespace InterfaceCallRelationship
             CustomIoC.Instance.Register<MainViewModel>();
             CustomIoC.Instance.Register<SettingViewModel>();
             CustomIoC.Instance.Register<AddNewFunctionViewModel>();
+            CustomIoC.Instance.Register<AssociatedViewModel>();
         }
 
 
@@ -50,5 +51,8 @@ namespace InterfaceCallRelationship
         public SettingViewModel SettingViewModel => CustomIoC.Instance.GetInstance<SettingViewModel>();
 
         public AddNewFunctionViewModel AddNewFunctionViewModel=>CustomIoC.Instance.GetInstanceWithoutCaching<AddNewFunctionViewModel>();
+
+        public AssociatedViewModel AssociatedViewModel => CustomIoC.Instance.GetInstanceWithoutCaching<AssociatedViewModel>();
+
     }
 }

@@ -53,7 +53,7 @@ namespace InterfaceCallRelationship.Model
         /// <summary>
         /// 功能模块名称
         /// </summary>
-        public string FuncitonName { get; set; }
+        public string FunctionName { get; set; }
 
         /// <summary>
         /// 名下的方法
@@ -65,6 +65,25 @@ namespace InterfaceCallRelationship.Model
     [Table("Method")]
     public class MethodClass:TopBaseModel
     {
+        /// <summary>
+        /// 系统ID
+        /// </summary>
+        public string SystemClassId { get; set; }
+
+        /// <summary>
+        /// 系统名称
+        /// </summary>
+        public string SystemClassName { get; set; }
+
+        /// <summary>
+        /// 模块ID
+        /// </summary>
+        public string ModuleClassId { get; set; }
+
+        /// <summary>
+        /// 模块名称
+        /// </summary>
+        public string ModuleClassName { get; set; }
         /// <summary>
         /// 功能模块ID
         /// </summary>
@@ -89,5 +108,29 @@ namespace InterfaceCallRelationship.Model
         /// 引用数量
         /// </summary>
         public int ReferenceCount { get; set; }
+
+
+    }
+
+    /// <summary>
+    /// 方法引用关系中间表
+    /// </summary>
+    [Table("MethodReferenceRelationship")]
+    public class MethodClassReferenceRelationship : TopBaseModel
+    {
+        public MethodClassReferenceRelationship()
+        {
+            //构造函数
+        }
+
+        /// <summary>
+        /// 源ID
+        /// </summary>
+        public string SourceId { get; set; }
+
+        /// <summary>
+        /// 引用的方法ID
+        /// </summary>
+        public string ReferenceId { get; set; }
     }
 }

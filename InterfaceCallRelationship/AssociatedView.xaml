@@ -1,0 +1,48 @@
+﻿<VUc:AddOrEditUcViewBase x:Class="InterfaceCallRelationship.AssociatedView"
+                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                         xmlns:VUc="Vampirewal.UcView"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:local="clr-namespace:InterfaceCallRelationship"
+                         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                         xmlns:VBeh="Vampirewal.Behaviors"
+                         mc:Ignorable="d"
+                         DataContext="{Binding Source={StaticResource Locator},Path=AssociatedViewModel}"
+                         d:DesignHeight="450"
+                         d:DesignWidth="800">
+    <VUc:AddOrEditUcViewBase.BottomBtnItems>
+        <Button Content="提交" Style="{StaticResource ButtonSuccess}" Margin="5,0" Command="{Binding SaveCommand}"/>
+    </VUc:AddOrEditUcViewBase.BottomBtnItems>
+    <Grid>
+        <Border Background="{StaticResource BaseForeground}" CornerRadius="5">
+            <DataGrid ItemsSource="{Binding Functions}"
+                      Background="Transparent"
+                      Margin="5,0"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="All"
+                      RowHeaderWidth="60"
+                      SelectionMode="Single"
+                      VerticalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="功能名称"
+                                        Width="2*"
+                                        Binding="{Binding MethodName}"
+                                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="选择"
+                                            Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Checked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <i:Interaction.Behaviors>
+                    <VBeh:DataGridGroupByBehavior  SetGroupByProrName="SystemClassName-ModuleClassName-FunctionClassName" />
+                </i:Interaction.Behaviors>
+            </DataGrid>
+        </Border>
+       
+    </Grid>
+</VUc:AddOrEditUcViewBase>

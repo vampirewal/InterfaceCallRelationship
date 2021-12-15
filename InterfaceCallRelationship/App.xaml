@@ -29,6 +29,7 @@
                     <SolidColorBrush x:Key="ToolTipBackground"
                                      Color="#3F4447" />
                 </ResourceDictionary>
+                <ResourceDictionary  Source="Styles/CustomControl/ShowViewBoxControl/ShowViewBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </vampire:VampirewalApplication.Resources>

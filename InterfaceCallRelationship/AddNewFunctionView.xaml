@@ -47,7 +47,7 @@
             <vc:TitleContent Title="功能名称"
                              TitleForeground="{StaticResource BaseForeground}"
                              TitleWidth="70">
-                <TextBox Text="{Binding Entity.FuncitonName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding Entity.FunctionName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                          Width="120" />
             </vc:TitleContent>
         </UniformGrid>
@@ -110,18 +110,21 @@
                             <RowDefinition />
                             <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
-                        <vc:TitleContent Title="方法名称"
-                                         TitleWidth="50"
-                                         TitleForeground="{StaticResource BaseForeground}">
-                            <TextBox Text="{Binding NewMethodClass.MethodName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                     Width="120" />
-                        </vc:TitleContent>
-                        <vc:TitleContent Title="是否公开方法"
-                                         TitleWidth="50"
-                                         TitleForeground="{StaticResource BaseForeground}">
-                            <!--<CheckBox Checked="{Binding NewMethodClass.IsPublic,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        <StackPanel>
+                            <vc:TitleContent Title="方法名称"
+                                             TitleWidth="80"
+                                             TitleForeground="{StaticResource BaseForeground}">
+                                <TextBox Text="{Binding NewMethodClass.MethodName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                         Width="120" />
+                            </vc:TitleContent>
+                            <vc:TitleContent Title="是否公开方法"
+                                             TitleWidth="80"
+                                             TitleForeground="{StaticResource BaseForeground}">
+                                <!--<CheckBox Checked="{Binding NewMethodClass.IsPublic,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                      Width="120" />-->
-                        </vc:TitleContent>
+                            </vc:TitleContent>
+                        </StackPanel>
+                        
                         <Button Grid.Row="1"
                                 HorizontalAlignment="Stretch"
                                 Content="提交"

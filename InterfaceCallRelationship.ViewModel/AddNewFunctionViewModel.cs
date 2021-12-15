@@ -95,7 +95,7 @@ namespace InterfaceCallRelationship.ViewModel
                 Entity.ModuleClassId = SelectModule.ID;
                 Entity.ModuleClassName = SelectModule.ModuleName;
 
-                if (!string.IsNullOrEmpty(Entity.FuncitonName))
+                if (!string.IsNullOrEmpty(Entity.FunctionName))
                 {
                     using (var trans = DC.Database.BeginTransaction())
                     {
@@ -103,6 +103,12 @@ namespace InterfaceCallRelationship.ViewModel
                         {
                             foreach (var item in Entity.methods)
                             {
+                                item.SystemClassId = Entity.SystemClassId;
+                                item.SystemClassName= Entity.SystemClassName;
+
+                                item.ModuleClassId = Entity.ModuleClassId;
+                                item.ModuleClassName = Entity.ModuleClassName;
+
                                 DC.AddEntity(item);
                             }
 
@@ -112,7 +118,7 @@ namespace InterfaceCallRelationship.ViewModel
 
                             trans.Commit();
 
-                            
+                            ((Window)View).Close();
                         }
                         catch (Exception ex)
                         {
@@ -147,7 +153,9 @@ namespace InterfaceCallRelationship.ViewModel
         public RelayCommand InsertNewMethodCommand => new RelayCommand(() => 
         {
             
+
             NewMethodClass.FunctionClassId = Entity.ID;
+            NewMethodClass.FunctionClassName = Entity.FunctionName;
 
             if (!string.IsNullOrEmpty(NewMethodClass.MethodName))
             {
