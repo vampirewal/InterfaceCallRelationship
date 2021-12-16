@@ -24,6 +24,9 @@ using Vampirewal.Core.SimpleMVVM;
 
 namespace InterfaceCallRelationship.ViewModel
 {
+    /// <summary>
+    /// 关联方法ViewModel
+    /// </summary>
     public class AssociatedViewModel:ViewModelBase
     {
         private IDialogMessage Dialog { get; set; }
@@ -63,8 +66,12 @@ namespace InterfaceCallRelationship.ViewModel
         #endregion
 
         #region 私有方法
+        /// <summary>
+        /// 获取数据
+        /// </summary>
         private void GetData()
         {
+            //获取的数据中，排除掉自己本身
             var current=DC.Set<MethodClass>().Where(w=>w.ID!=Source.ID).ToList();
             Functions.Clear();
 
@@ -77,11 +84,15 @@ namespace InterfaceCallRelationship.ViewModel
         #endregion
 
         #region 命令
-
+        /// <summary>
+        /// 保存命令
+        /// </summary>
         public RelayCommand SaveCommand => new RelayCommand(() => 
         {
+            //获取到已选择的方法
             if (Functions.Any(a=>a.Checked))
             {
+                //挨个写入要返回上一个页面的列表内
                 foreach (var item in Functions.Where(a => a.Checked).ToList())
                 {
                     ResultIds.Add(item.ID);

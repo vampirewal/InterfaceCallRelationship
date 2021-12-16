@@ -116,11 +116,15 @@ namespace InterfaceCallRelationship.ViewModel
         }
         #endregion
 
-        #region 命令
+        #region 命令（没有写太复杂，我就不写注释了。。）
 
         public RelayCommand AddNewSystemClassCommand => new RelayCommand(() => 
         {
-            NewSystemClass=new SystemClass() { IsEnable=true,CreateTime=DateTime.Now};
+            NewSystemClass=new SystemClass() 
+            { 
+                IsEnable=true,
+                CreateTime=DateTime.Now
+            };
         });
 
         public RelayCommand InsertSystemClassCommand => new RelayCommand(() => 

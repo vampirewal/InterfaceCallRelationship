@@ -24,6 +24,7 @@ using Vampirewal.Core.SimpleMVVM;
 
 namespace InterfaceCallRelationship
 {
+
     public class ViewModelLocator : ViewModelLocatorBase
     {
         public override void InitRegisterService()

@@ -28,37 +28,7 @@ namespace InterfaceCallRelationship
         public MainWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<MethodClass>(this, "CreateTopThumb", CreateTopThumb);
         }
 
-        private void CreateTopThumb(MethodClass methodclass)
-        {
-            //canvas.Children.Clear();
-
-            //ClassNode node= new ClassNode();
-            //node.Reference = true;
-            //node.TitleName = methodclass.FunctionClassName;
-            //node.ShowMethodName = methodclass.MethodName;
-            //node.IsTopNode = true;
-
-            //Canvas.SetTop(node, 2);
-            //Canvas.SetLeft(node, 2);
-            //Canvas.SetZIndex(node, 999);
-
-            
-
-
-            //canvas.Children.Add(node);
-        }
-
-        private void ClassNode_DragDelta(object sender, DragDeltaEventArgs e)
-        {
-            Thumb myThumb = (Thumb)sender;
-
-            double nTop = Canvas.GetTop(myThumb) + e.VerticalChange;
-            double nLeft = Canvas.GetLeft(myThumb) + e.HorizontalChange;
-            Canvas.SetTop(myThumb, nTop);
-            Canvas.SetLeft(myThumb, nLeft);
-        }
     }
 }

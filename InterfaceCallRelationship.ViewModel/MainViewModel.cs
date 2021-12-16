@@ -26,6 +26,9 @@ using Vampirewal.Core.SimpleMVVM;
 
 namespace InterfaceCallRelationship.ViewModel
 {
+    /// <summary>
+    /// 主窗体ViewModel
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         private IDialogMessage Dialog { get; set; }
@@ -35,6 +38,7 @@ namespace InterfaceCallRelationship.ViewModel
             //构造函数
             Title = Config.AppChineseName;
         }
+
 
         public override void InitData()
         {
@@ -46,8 +50,14 @@ namespace InterfaceCallRelationship.ViewModel
         }
 
         #region 属性
+        /// <summary>
+        /// 功能模块列表，用于界面左侧
+        /// </summary>
         public ObservableCollection<FunctionClass> Functions { get; set; }
 
+        /// <summary>
+        /// 方法列表，用于功能模块中查看方法
+        /// </summary>
         public ObservableCollection<MethodNode> Methods { get; set; }
         #endregion
 
@@ -56,6 +66,9 @@ namespace InterfaceCallRelationship.ViewModel
         #endregion
 
         #region 私有方法
+        /// <summary>
+        /// 初始获取数据
+        /// </summary>
         private void GetData()
         {
             var cur = DC.Set<FunctionClass>().ToList();
@@ -81,12 +94,16 @@ namespace InterfaceCallRelationship.ViewModel
         /// </summary>
         public RelayCommand OpenSettingWindowCommand => new RelayCommand(() =>
         {
+            /*
+             * 此处的Dialog.OpenDialogWindow的详细用法，可以看我的博客中介绍 https://blog.csdn.net/weixin_42806176/article/details/120842040
+             */
+
             Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
             {
                 UiView = Messenger.Default.Send<FrameworkElement>("GetView", ViewKeys.SettingView),
                 WindowWidth = 700,
                 WindowHeight = 430,
-                IconStr = "",
+                IconStr = "",//如果其他地方也需要使用这个IconStr代码的话，请按照我这样写，直接赋值“”,因为有问题，但是我没时间去测试和修改。。。
                 IsShowMaxButton = false,
                 IsShowMinButton = false
             });
@@ -100,7 +117,9 @@ namespace InterfaceCallRelationship.ViewModel
             GetData();
         });
 
-
+        /// <summary>
+        /// 新增功能模块命令
+        /// </summary>
         public RelayCommand AddNewDataCommand => new RelayCommand(() =>
         {
             bool IsOk=Convert.ToBoolean( Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
@@ -119,6 +138,9 @@ namespace InterfaceCallRelationship.ViewModel
             }
         });
 
+        /// <summary>
+        /// 编辑功能模块命令
+        /// </summary>
         public RelayCommand<FunctionClass> EditDataCommand => new RelayCommand<FunctionClass>((f) => 
         {
             bool IsOk = Convert.ToBoolean(Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
@@ -138,6 +160,9 @@ namespace InterfaceCallRelationship.ViewModel
             }
         });
 
+        /// <summary>
+        /// 建立方法之间引用关系的命令
+        /// </summary>
         public RelayCommand<MethodClass> AssociatedCommand => new RelayCommand<MethodClass>((m) =>
         {
             List<string>? SelectedItems = Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
@@ -155,8 +180,6 @@ namespace InterfaceCallRelationship.ViewModel
 
             if (SelectedItems != null && SelectedItems.Count > 0)
             {
-
-
                 using (var trans = DC.Database.BeginTransaction())
                 {
                     try
@@ -196,13 +219,24 @@ namespace InterfaceCallRelationship.ViewModel
 
         public RelayCommand<MethodClass> LookReferenceCommnad => new RelayCommand<MethodClass>(LookReference);
 
+        /// <summary>
+        /// 查看引用关系命令
+        /// </summary>
+        /// <param name="m"></param>
         private void LookReference(MethodClass m)
         {
+            /*
+             * 触发这个命令的是我定义为最顶层的节点，所以需要清空界面中的node
+             * 然后根据这个最顶层的节点，重新开始绘制
+             */
             Methods.Clear();
 
+            //获取引用的目标Id
             var sources = DC.Set<MethodClassReferenceRelationship>().Where(w => w.SourceId == m.ID).Select(s => s.ReferenceId).ToList();
+            //获取引用自己的父级ID
             var References = DC.Set<MethodClassReferenceRelationship>().Where(w => w.ReferenceId == m.ID).Select(s => s.SourceId).ToList();
 
+            //这个就很简单了，简单赋值添加进界面的数据源中即可
             Methods.Add(new MethodNode()
             {
                 Id = m.ID,
@@ -214,15 +248,20 @@ namespace InterfaceCallRelationship.ViewModel
             });
         }
 
-
+        /// <summary>
+        /// 向下展开命令
+        /// </summary>
         public RelayCommand<MethodNode> ShowDownCommand => new RelayCommand<MethodNode>((m) =>
         {
+            //
             foreach (var item in m.TargetList)
             {
+                //这里加了1个判断，为了避免重复点击同一个向下展开按钮，在界面上重复创建node
                 if (Methods.Any(a=>a.Id==item))
                 {
                     return;
                 }
+
 
                 var target = DC.Set<MethodClass>().Where(w => w.ID == item).FirstOrDefault();
                 if (target != null)
@@ -247,6 +286,9 @@ namespace InterfaceCallRelationship.ViewModel
 
         });
 
+        /// <summary>
+        /// 向上展开命令
+        /// </summary>
         public RelayCommand<MethodNode> ShowUpCommand => new RelayCommand<MethodNode>((m) =>
         {
             foreach (var item in m.SourceList)

@@ -158,9 +158,7 @@
                                                                     </DataGridTemplateColumn.CellTemplate>
                                                                 </DataGridTemplateColumn>
                                                             </DataGrid.Columns>
-                                                            <!--<i:Interaction.Behaviors>
-                                                                <VBeh:DataGridGroupByBehavior  SetGroupByProrName="IsPublic" />
-                                                            </i:Interaction.Behaviors>-->
+                                                           
                                                         </DataGrid>
                                                     </Border>
                                                 </Grid>

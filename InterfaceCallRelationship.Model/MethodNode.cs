@@ -43,14 +43,14 @@ namespace InterfaceCallRelationship.Model
 
         public List<string> SourceList { get; set; } = new List<string>();
         /// <summary>
-        /// 是否有引用
+        /// 是否有被引用
         /// </summary>
         public bool IsSource { get { return SourceList.Count > 0; } }
 
 
         public List<string> TargetList { get; set; } = new List<string>();
         /// <summary>
-        /// 是否有被引用
+        /// 是否有引用
         /// </summary>
         public bool IsReferenced { get { return TargetList.Count > 0; } }
 
