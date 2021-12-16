@@ -160,6 +160,9 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
                                 
                             }
 
+                            node.DragStarted += ClassNode_DragStarted;
+                            node.DragDelta += ClassNode_DragDelta;
+                            node.DragCompleted += ClassNode_DragCompleted;
 
                             if (!methodnode.IsTopNode)
                             {
@@ -173,9 +176,7 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
 
                                 }
 
-                                node.DragStarted += ClassNode_DragStarted;
-                                node.DragDelta += ClassNode_DragDelta;
-                                node.DragCompleted += ClassNode_DragCompleted;
+                                
 
                                 Canvas.SetTop(node, 200);
                                 Canvas.SetLeft(node, 200);
@@ -233,12 +234,14 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-            var node = ClassNodeDic.Find(f => f.IsTopNode);
-            if (node != null)
-            {
-                Canvas.SetTop(node, this.ActualHeight / 2);
-                Canvas.SetLeft(node, this.ActualWidth / 2);
-            }
+            //var node = ClassNodeDic.Find(f => f.IsTopNode);
+            //if (node != null)
+            //{
+            //    //Canvas.SetTop(node, this.ActualHeight / 2);
+            //    //Canvas.SetLeft(node, this.ActualWidth / 2);
+
+            //    UpdateTopNode(node);
+            //}
             
         }
 
@@ -317,7 +320,11 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
 
         private void UpdateTopNode(ClassNode node)
         {
-
+            var childs=ClassNodeDic.Where(w=>w.ParentId == node.Id).ToList();
+            foreach (var child in childs)
+            {
+                UpdateThumb(node, child, false);
+            }
         }
 
         private void ClassNode_DragCompleted(object sender, DragCompletedEventArgs e)
@@ -334,20 +341,28 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
         {
             ClassNode curThumb = (ClassNode)sender;
 
+            double nTop = Canvas.GetTop(curThumb) + e.VerticalChange;
+            double nLeft = Canvas.GetLeft(curThumb) + e.HorizontalChange;
+            Canvas.SetTop(curThumb, nTop);
+            Canvas.SetLeft(curThumb, nLeft);
+
+
             var ParentNode=ClassNodeDic.FirstOrDefault(x => x.Id == curThumb.ParentId);
             if (ParentNode != null)
             {
-
-
-                double nTop = Canvas.GetTop(curThumb) + e.VerticalChange;
-                double nLeft = Canvas.GetLeft(curThumb) + e.HorizontalChange;
-                Canvas.SetTop(curThumb, nTop);
-                Canvas.SetLeft(curThumb, nLeft);
-
                 UpdateThumb(ParentNode, curThumb, false);
             }
 
-           
+            var ChildNode=ClassNodeDic.Where(w=>w.ParentId==curThumb.Id).ToList();
+            foreach (var item in ChildNode)
+            {
+                UpdateThumb(curThumb, item, false);
+            }
+
+            if (curThumb.IsTopNode)
+            {
+                UpdateTopNode(curThumb);
+            }
         }
 
 

@@ -3,7 +3,9 @@
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                          xmlns:VUc="Vampirewal.UcView"
-                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:vc="Vampirewal.CustomControl" xmlns:VBeh="Vampirewal.Behaviors"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:vc="Vampirewal.CustomControl"
+                         xmlns:VBeh="Vampirewal.Behaviors"
                          xmlns:local="clr-namespace:InterfaceCallRelationship"
                          xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                          mc:Ignorable="d"
@@ -17,19 +19,26 @@
     </VUc:AddOrEditUcViewBase.BottomBtnItems>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <UniformGrid Columns="3" VerticalAlignment="Top" Margin="5">
-            <vc:TitleContent Title="所属系统" TitleForeground="{StaticResource BaseForeground}" TitleWidth="70">
+        <UniformGrid Columns="3"
+                     VerticalAlignment="Top"
+                     Margin="5">
+            <vc:TitleContent Title="所属系统"
+                             TitleForeground="{StaticResource BaseForeground}"
+                             TitleWidth="70">
                 <ComboBox Width="120"
                           ItemsSource="{Binding Systems}"
-                          DisplayMemberPath="SystemName"  Name="SystemCombo"
+                          DisplayMemberPath="SystemName"
+                          Name="SystemCombo"
                           SelectedValuePath="ID"
+                          SelectedValue="{Binding Entity.SystemClassId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectSystem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedSystemChanged}" CommandParameter="{Binding ElementName=SystemCombo,Path=SelectedItem}"/>
+                            <i:InvokeCommandAction Command="{Binding SelectedSystemChanged}"
+                                                   CommandParameter="{Binding ElementName=SystemCombo,Path=SelectedItem}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
@@ -41,9 +50,9 @@
                           ItemsSource="{Binding Modules}"
                           DisplayMemberPath="ModuleName"
                           SelectedValuePath="ID"
+                          SelectedValue="{Binding Entity.ModuleClassId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectModule,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </vc:TitleContent>
-            
             <vc:TitleContent Title="功能名称"
                              TitleForeground="{StaticResource BaseForeground}"
                              TitleWidth="70">
@@ -53,7 +62,7 @@
         </UniformGrid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="40" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
@@ -67,7 +76,9 @@
                     </i:Interaction.Triggers>
                 </ToggleButton>
             </StackPanel>
-            <Border Grid.Row="1" Background="{StaticResource BaseForeground}" CornerRadius="5">
+            <Border Grid.Row="1"
+                    Background="{StaticResource BaseForeground}"
+                    CornerRadius="5">
                 <DataGrid ItemsSource="{Binding Entity.methods}"
                           Background="Transparent"
                           Margin="5,0"
@@ -81,9 +92,9 @@
                                             Binding="{Binding MethodName}"
                                             IsReadOnly="True" />
                     </DataGrid.Columns>
-                    <i:Interaction.Behaviors>
+                    <!--<i:Interaction.Behaviors>
                         <VBeh:DataGridGroupByBehavior SetGroupByProrName="IsPublic" />
-                    </i:Interaction.Behaviors>
+                    </i:Interaction.Behaviors>-->
                 </DataGrid>
             </Border>
             <Popup AllowsTransparency="True"
@@ -124,7 +135,6 @@
                                      Width="120" />-->
                             </vc:TitleContent>
                         </StackPanel>
-                        
                         <Button Grid.Row="1"
                                 HorizontalAlignment="Stretch"
                                 Content="提交"

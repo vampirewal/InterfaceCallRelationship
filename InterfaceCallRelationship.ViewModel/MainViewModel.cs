@@ -103,7 +103,7 @@ namespace InterfaceCallRelationship.ViewModel
 
         public RelayCommand AddNewDataCommand => new RelayCommand(() =>
         {
-            Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
+            bool IsOk=Convert.ToBoolean( Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
             {
                 UiView = Messenger.Default.Send<FrameworkElement>("GetView", ViewKeys.AddNewFunctionView),
                 WindowWidth = 680,
@@ -111,7 +111,31 @@ namespace InterfaceCallRelationship.ViewModel
                 IconStr = "",
                 IsShowMaxButton = false,
                 IsShowMinButton = false
-            });
+            }));
+
+            if (IsOk)
+            {
+                GetData();
+            }
+        });
+
+        public RelayCommand<FunctionClass> EditDataCommand => new RelayCommand<FunctionClass>((f) => 
+        {
+            bool IsOk = Convert.ToBoolean(Dialog.OpenDialogWindow(new Vampirewal.Core.WpfTheme.WindowStyle.DialogWindowSetting()
+            {
+                UiView = Messenger.Default.Send<FrameworkElement>("GetView", ViewKeys.AddNewFunctionView),
+                PassData = f,
+                WindowWidth = 680,
+                WindowHeight = 450,
+                IconStr = "",
+                IsShowMaxButton = false,
+                IsShowMinButton = false
+            }));
+
+            if (IsOk)
+            {
+                GetData();
+            }
         });
 
         public RelayCommand<MethodClass> AssociatedCommand => new RelayCommand<MethodClass>((m) =>
@@ -174,13 +198,15 @@ namespace InterfaceCallRelationship.ViewModel
 
         private void LookReference(MethodClass m)
         {
+            Methods.Clear();
+
             var sources = DC.Set<MethodClassReferenceRelationship>().Where(w => w.SourceId == m.ID).Select(s => s.ReferenceId).ToList();
             var References = DC.Set<MethodClassReferenceRelationship>().Where(w => w.ReferenceId == m.ID).Select(s => s.SourceId).ToList();
 
             Methods.Add(new MethodNode()
             {
                 Id = m.ID,
-                FunctionName = m.FunctionClassName,
+                FunctionName =$"({m.SystemClassName}-{m.ModuleClassName}){m.FunctionClassName}" ,
                 MethodName = m.MethodName,
                 IsTopNode = true,
                 SourceList = References,
@@ -208,7 +234,7 @@ namespace InterfaceCallRelationship.ViewModel
                     {
                         ParentId = m.Id,
                         Id = target.ID,
-                        FunctionName = target.FunctionClassName,
+                        FunctionName = $"({target.SystemClassName}-{target.ModuleClassName}){target.FunctionClassName}",
                         MethodName = target.MethodName,
                         IsTopNode = false,
                         SourceList = References,

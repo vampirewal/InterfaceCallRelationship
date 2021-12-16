@@ -5,7 +5,7 @@
                      xmlns:VWin="Vampirewal.Windows"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:VBeh="Vampirewal.Behaviors"
-                     xmlns:test="clr-namespace:InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl"
+                     xmlns:Show="clr-namespace:InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl"
                      xmlns:local="clr-namespace:InterfaceCallRelationship"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      DataContext="{Binding Source={StaticResource Locator},Path=MainViewModel}"
@@ -73,35 +73,7 @@
                                       Color="#3a3952" />
                 </Border.Effect>
             </Border>
-            <!--<ScrollViewer>
-                <StackPanel>
-                    <Expander Margin="5"
-                              BorderBrush="#ddd"
-                              BorderThickness="1"
-                              Header="基础设置">
-                        <Border Padding="5"
-                                Background="{StaticResource BaseBackground}"
-                                BorderBrush="{StaticResource BaseForeground}"
-                                BorderThickness="1,0,1,1"
-                                CornerRadius="0,0,5,5">
-                            <StackPanel>
-                                <CheckBox Margin="0,5"
-                                          Content="是否展示心跳验证"
-                                          Foreground="{StaticResource BaseForeground}"
-                                          IsChecked="{Binding IsStartHeart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <CheckBox Margin="0,5"
-                                          Content="是否展示设备温度"
-                                          Foreground="{StaticResource BaseForeground}"
-                                          IsChecked="{Binding IsShowTemperature, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <CheckBox Margin="0,5"
-                                          Content="是否展示设备电量"
-                                          Foreground="{StaticResource BaseForeground}"
-                                          IsChecked="{Binding IsShowPower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </Border>
-                    </Expander>
-                </StackPanel>
-            </ScrollViewer>-->
+            
             <Border CornerRadius="5"
                     Background="{StaticResource BaseForeground}">
                 <StackPanel>
@@ -120,13 +92,20 @@
                                                 Binding="{Binding FunctionName}"
                                                 IsReadOnly="True" />
                             <DataGridTemplateColumn Header="操作"
-                                                    Width="1*">
+                                                    Width="1.2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <ToggleButton Content="查看方法"
-                                                          HorizontalAlignment="Center"
-                                                          x:Name="lookMethods" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Center">
+                                                <Button Content="新增方法"
+                                                        Margin="5,0"
+                                                        Command="{Binding DataContext.EditDataCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}"
+                                                        CommandParameter="{Binding}" />
+                                                <ToggleButton Content="查看方法"
+                                                              HorizontalAlignment="Center"
+                                                              x:Name="lookMethods" />
+                                            </StackPanel>
                                             <Popup AllowsTransparency="True"
                                                    IsOpen="{Binding ElementName=lookMethods,Path=IsChecked}"
                                                    Placement="Bottom"
@@ -161,15 +140,16 @@
                                                                 <DataGridTextColumn Header="方法名"
                                                                                     Binding="{Binding MethodName}"
                                                                                     IsReadOnly="True"
-                                                                                    Width="1*" />
+                                                                                    Width="0.8*" />
                                                                 <DataGridTemplateColumn Header="操作"
                                                                                         Width="1*">
                                                                     <DataGridTemplateColumn.CellTemplate>
                                                                         <DataTemplate>
                                                                             <StackPanel Orientation="Horizontal">
-                                                                                <Button Content="建立关联" Margin="5,0"
-                                                                                        Command="{Binding DataContext.AssociatedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}" 
-                                                                                        CommandParameter="{Binding}"/>
+                                                                                <Button Content="建立关联"
+                                                                                        Margin="5,0"
+                                                                                        Command="{Binding DataContext.AssociatedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}"
+                                                                                        CommandParameter="{Binding}" />
                                                                                 <Button Content="查看引用"
                                                                                         Command="{Binding DataContext.LookReferenceCommnad,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=VWin:MainWindowBase}}"
                                                                                         CommandParameter="{Binding}" />
@@ -178,9 +158,9 @@
                                                                     </DataGridTemplateColumn.CellTemplate>
                                                                 </DataGridTemplateColumn>
                                                             </DataGrid.Columns>
-                                                            <i:Interaction.Behaviors>
+                                                            <!--<i:Interaction.Behaviors>
                                                                 <VBeh:DataGridGroupByBehavior  SetGroupByProrName="IsPublic" />
-                                                            </i:Interaction.Behaviors>
+                                                            </i:Interaction.Behaviors>-->
                                                         </DataGrid>
                                                     </Border>
                                                 </Grid>
@@ -200,44 +180,8 @@
     </VWin:MainWindowBase.LeftContent>
     <Border CornerRadius="5"
             Background="White">
-        <!--<Canvas  Margin="3" Name="canvas"
-                ClipToBounds="True">
-            <TextBlock Canvas.Top="2"
-                       Canvas.Left="2"
-                       x:Name="tt"
-                       FontSize="24"></TextBlock>
-            <test:ClassNode Canvas.Top="0"
-                            Canvas.Left="0" ShowMethodName="test!!"/>
-            <Rectangle />
-            -->
-        <!--<Thumb Canvas.Top="2"
-               Canvas.Left="2"
-               Width="35"
-               Height="35"
-               DragDelta="Thumb_DragDelta"
-               DragStarted="Thumb_DragStarted"
-               DragCompleted="Thumb_DragCompleted" />-->
-        <!--
-        </Canvas>-->
-        <!--<ItemsControl Margin="3"
-                      ItemsSource="{Binding Methods}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas ClipToBounds="True" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <test:ClassNode Canvas.Top="0"
-                                    IsTopNode="{Binding IsTopNode}"
-                                    TitleName="{Binding FunctionName}"
-                                    Canvas.Left="0"
-                                    ShowMethodName="{Binding MethodName}" DragDelta="ClassNode_DragDelta"/>
-                </DataTemplate>
-                
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
-        <test:ShowCallRelationshipPanel ClassNodes="{Binding Methods}"
+        
+        <Show:ShowCallRelationshipPanel ClassNodes="{Binding Methods}"
                                         ShowDownCommand="{Binding ShowDownCommand}"
                                         ShowUpCommand="{Binding ShowUpCommand}"
                                         ClipToBounds="True" />

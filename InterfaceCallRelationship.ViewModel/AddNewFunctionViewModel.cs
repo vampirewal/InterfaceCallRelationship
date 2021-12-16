@@ -35,6 +35,29 @@ namespace InterfaceCallRelationship.ViewModel
             Title = "新增功能模块";
         }
 
+        private bool IsEdit { get; set; }=false;
+        public override void PassData(object obj)
+        {
+            FunctionClass current=obj as FunctionClass;
+            if (current != null)
+            {
+                var system=DC.Set<SystemClass>().First(f=>f.ID==current.SystemClassId);
+
+                SelectedSystemChangedCommand(system);
+
+                SetEntity(current);
+
+                IsEdit=true;
+            }
+        }
+
+        bool IsOk = false;
+        public override object GetResult()
+        {
+            return IsOk;
+        }
+
+
         protected override void BaseCRUDInit()
         {
             Systems = new ObservableCollection<SystemClass>();
@@ -101,6 +124,8 @@ namespace InterfaceCallRelationship.ViewModel
                     {
                         try
                         {
+                            DC.Set<MethodClass>().Where(w => w.FunctionClassId == Entity.ID).ToList().ForEach(f => Entity.methods.Remove(f));
+
                             foreach (var item in Entity.methods)
                             {
                                 item.SystemClassId = Entity.SystemClassId;
@@ -112,12 +137,21 @@ namespace InterfaceCallRelationship.ViewModel
                                 DC.AddEntity(item);
                             }
 
-                            DC.AddEntity(Entity);
+                            if (IsEdit)
+                            {
+                                //DC.UpdateEntity(Entity);
+                            }
+                            else
+                            {
+                                DC.AddEntity(Entity);
+                            }
+
+                            
 
                             DC.SaveChanges();
 
                             trans.Commit();
-
+                            IsOk=true;
                             ((Window)View).Close();
                         }
                         catch (Exception ex)
@@ -131,19 +165,21 @@ namespace InterfaceCallRelationship.ViewModel
         });
 
 
-        public RelayCommand<SystemClass> SelectedSystemChanged => new RelayCommand<SystemClass>((s) => 
+        public RelayCommand<SystemClass> SelectedSystemChanged => new RelayCommand<SystemClass>(SelectedSystemChangedCommand);
+
+        private void SelectedSystemChangedCommand(SystemClass s)
         {
             if (s != null)
             {
                 Modules.Clear();
 
-                var modules = DC.Set<ModuleClass>().Where(w=>w.SystemClassId==s.ID).ToList();
+                var modules = DC.Set<ModuleClass>().Where(w => w.SystemClassId == s.ID).ToList();
                 foreach (var module in modules)
                 {
                     Modules.Add(module);
                 }
             }
-        });
+        }
 
         public RelayCommand AddNewMethodCommand => new RelayCommand(() => 
         {
