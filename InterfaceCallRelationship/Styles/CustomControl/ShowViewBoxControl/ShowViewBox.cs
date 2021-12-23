@@ -163,6 +163,8 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
                             node.DragStarted += ClassNode_DragStarted;
                             node.DragDelta += ClassNode_DragDelta;
                             node.DragCompleted += ClassNode_DragCompleted;
+                            node.MouseRightButtonDown += Node_MouseRightButtonDown;
+                            node.MouseRightButtonUp += Node_MouseRightButtonUp;
 
                             if (!methodnode.IsTopNode)
                             {
@@ -173,17 +175,17 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
                                 //获取到这个节点的父级节点
                                 var ParentNode=ClassNodeDic.Find(f=>f.Id==methodnode.ParentId);
 
-                                if (methodnode.IsSource)
-                                {
-                                    Canvas.SetLeft(node, Canvas.GetTop(ParentNode)-200);//往左边放200
-                                }
+                                //if (methodnode.IsSource)
+                                //{
+                                //    Canvas.SetLeft(node,( Canvas.GetLeft(ParentNode)-200)<0?0: Canvas.GetLeft(ParentNode) - 200);//往左边放200
+                                //}
 
-                                if (methodnode.IsReferenced)
-                                {
-                                    Canvas.SetLeft(node, Canvas.GetTop(ParentNode) + 200);//往左边放200
-                                }
-
-                                Canvas.SetTop(node, Canvas.GetTop(ParentNode));//设置为同一行
+                                //if (methodnode.IsReferenced)
+                                //{
+                                //    Canvas.SetLeft(node, Canvas.GetLeft(ParentNode) + 200);//往左边放200
+                                //}
+                                Canvas.SetLeft(node, Canvas.GetLeft(ParentNode) + 250);//往左边放200
+                                Canvas.SetTop(node, Canvas.GetTop(ParentNode)+100);//设置为同一行
                                 Canvas.SetZIndex(node, 1);
 
                             }
@@ -237,6 +239,8 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
             }
         }
 
+        
+
 
         /// <summary>
         /// 绘制连线
@@ -289,14 +293,15 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
 
                 }
 
+                
+
                 //将线条添加进canvas中显示
                 this.Children.Add(path);
                 //将线条传入自身节点中储存
                 node2.OwnPath = path;
             }
-            else
+            else if(node2.OwnPath != null)
             {
-
                 node2.OwnPath.SetValue(Canvas.LeftProperty, Math.Min(point1.X, point2.X));
                 node2.OwnPath.SetValue(Canvas.TopProperty, Math.Min(point1.Y, point2.Y));
                 node2.OwnPath.Width = Math.Abs(point1.X - point2.X);
@@ -314,6 +319,7 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
                     scale.ScaleX = point1.Y < point2.Y ? -1 : 1;
 
                 }
+
             }
 
 
@@ -340,7 +346,12 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
         /// <param name="e"></param>
         private void ClassNode_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            //Thumb curThumb = (Thumb)sender;
+            ClassNode curThumb = (ClassNode)sender;
+            if (!curThumb.IsTopNode)
+            {
+                Canvas.SetZIndex(curThumb, 1);
+            }
+            
         }
 
         /// <summary>
@@ -350,7 +361,11 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
         /// <param name="e"></param>
         private void ClassNode_DragStarted(object sender, DragStartedEventArgs e)
         {
-            //Thumb curThumb = (Thumb)sender;
+            ClassNode curThumb = (ClassNode)sender;
+            if (!curThumb.IsTopNode)
+            {
+                Canvas.SetZIndex(curThumb, 10);
+            }
         }
 
         /// <summary>
@@ -387,6 +402,64 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
                 UpdateTopNode(curThumb);
             }
         }
+
+        #region ClassNode点击右键查看引用关系连线变色
+        private void Node_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ClassNode cur)
+            {
+                //cur.OwnPath.Stroke = Brushes.Red;
+                if (!string.IsNullOrEmpty(cur.ParentId))
+                {
+                    ChangeClassNodePathColor(cur, ClassNodeDic, false);
+                }
+            }
+        }
+
+        private void Node_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ClassNode cur)
+            {
+                //cur.OwnPath.Stroke = Brushes.Red;
+                if (!string.IsNullOrEmpty(cur.ParentId))
+                {
+                    ChangeClassNodePathColor(cur, ClassNodeDic, true);
+                }
+            }
+        }
+
+        private void ChangeClassNodePathColor(ClassNode node, List<ClassNode> nodes, bool IsDownOrUp)
+        {
+            if (IsDownOrUp)
+            {
+                if (!string.IsNullOrEmpty(node.ParentId))
+                {
+                    node.OwnPath.Stroke = Brushes.Red;
+
+                    var parent = nodes.FirstOrDefault(f => f.Id == node.ParentId);
+                    if (parent != null)
+                    {
+                        ChangeClassNodePathColor(parent, nodes, true);
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(node.ParentId))
+                {
+                    node.OwnPath.Stroke = Brushes.Green;
+
+                    var parent = nodes.FirstOrDefault(f => f.Id == node.ParentId);
+                    if (parent != null)
+                    {
+                        ChangeClassNodePathColor(parent, nodes, false);
+                    }
+                }
+            }
+
+
+        } 
+        #endregion
 
         #endregion
 
@@ -492,7 +565,7 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
             else
             {
                 ShowUp.IsEnabled = false;
-                
+                ShowUp.Visibility = Visibility.Collapsed;
             }
 
 
@@ -506,6 +579,7 @@ namespace InterfaceCallRelationship.Styles.CustomControl.ShowViewBoxControl
             else
             {
                 ShowDown.IsEnabled = false;
+                ShowDown.Visibility = Visibility.Collapsed;
             }
                         
         }

@@ -69,9 +69,19 @@ namespace InterfaceCallRelationship.ViewModel
         /// <summary>
         /// 初始获取数据
         /// </summary>
-        private void GetData()
+        private void GetData(string SearchString="")
         {
-            var cur = DC.Set<FunctionClass>().ToList();
+            List<FunctionClass> cur = new List<FunctionClass>();
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                cur = DC.Set<FunctionClass>().Where(w => w.SystemClassName.Contains(SearchString) || w.ModuleClassName.Contains(SearchString) || w.FunctionName.Contains(SearchString)).ToList();
+            }
+            else
+            {
+                cur = DC.Set<FunctionClass>().ToList();
+            }
+             
 
             Functions.Clear();
             foreach (var item in cur)
@@ -315,6 +325,26 @@ namespace InterfaceCallRelationship.ViewModel
                         TargetList = sources,
                     });
                 }
+            }
+        });
+
+        private bool IsSearch { get; set; } = false;
+        /// <summary>
+        /// 搜索命令
+        /// </summary>
+        public RelayCommand<string> SearchCommand => new RelayCommand<string>((s) => 
+        {
+            if (!string.IsNullOrEmpty(s))
+            {
+                GetData(s);
+
+                IsSearch =true;
+
+            }
+            else if(IsSearch)
+            {
+                GetData();
+                IsSearch = false;
             }
         });
         #endregion
